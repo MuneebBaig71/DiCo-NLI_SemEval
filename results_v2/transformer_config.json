@@ -1,0 +1,17 @@
+{
+  "epochs": 6,
+  "lr": 3e-05,
+  "batch_size": 16,
+  "max_len": 64,
+  "warmup": 0.1,
+  "weight_decay": 0.01,
+  "models": [
+    "bert-base-uncased",
+    "roberta-base"
+  ],
+  "seeds": [
+    13,
+    42,
+    87
+  ]
+}

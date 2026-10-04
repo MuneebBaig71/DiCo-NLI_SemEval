@@ -1,0 +1,27 @@
+Model: bert-base-uncased_seed42   dev accuracy 0.477
+
+Confusion matrix (rows = gold):
+pred                 FORWARD_ENTAILMENT  BACKWARD_ENTAILMENT  EQUIVALENCE  NEGATIVE_OTHER
+label                                                                                    
+FORWARD_ENTAILMENT                   92                   68           16              14
+BACKWARD_ENTAILMENT                  57                   99           16              18
+EQUIVALENCE                          20                   37           84              33
+NEGATIVE_OTHER                       10                   45           11              40
+
+Reversible-pair outcomes:
+pair type                               EQUIV pair  FWD/BWD pair  All
+outcome                                                              
+both directions correct                         40            37   77
+consistent but wrong                             2            17   19
+direction-blind (same label both ways)          24           116  140
+one direction predicted NEG_OTHER               20            19   39
+other inconsistency                              1             1    2
+All                                             87           190  277
+
+Error types (heuristic tags):
+error_type
+EQUIV vs entailment confusion                                194
+related pair rejected as NEG_OTHER                            65
+unrelated/contrastive predicted as related (high overlap)     35
+followed length cue (longer side -> entails)                  34
+unrelated/contrastive predicted as related                    17

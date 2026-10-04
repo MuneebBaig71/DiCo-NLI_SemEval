@@ -1,0 +1,22 @@
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{lccccc}
+\toprule
+Model & W-F1 & SoftCons & HardCons & Macro-F1 & Acc. \\
+\midrule
+\multicolumn{6}{l}{\textit{Classical (A)}} \\
+Majority class & 0.129 & 0.000 & 0.000 & 0.112 & 0.288 \\
+LR (length only) & 0.464 & 0.989 & 0.628 & 0.408 & 0.532 \\
+LR (symmetric overlap only) & 0.324 & 0.368 & 0.188 & 0.291 & 0.370 \\
+LR (engineered features) & 0.593 & 0.877 & 0.653 & 0.558 & 0.602 \\
+TF-IDF + LR & 0.484 & 0.877 & 0.542 & 0.452 & 0.500 \\
+TF-IDF + features + LR & 0.620 & 0.856 & 0.661 & 0.588 & 0.626 \\
+\multicolumn{6}{l}{\textit{Pretrained, fine-tuned (B)}} \\
+bert-base-uncased (1 seed) & 0.481 & 0.347 & 0.278 & 0.472 & 0.477 \\
+deberta-v3-base (1 seed) & 0.110 & 1.000 & 0.314 & 0.104 & 0.264 \\
+\bottomrule
+\end{tabular}
+\caption{Dev results (Track 1, English), official scorer. W-F1, SoftCons and HardCons are the official metrics.}
+\label{tab:results}
+\end{table}

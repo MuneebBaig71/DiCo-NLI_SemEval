@@ -1,0 +1,26 @@
+instance_id,text1,text2,label,pred,len_diff,jaccard,error_type
+dico_phrasis_0000948__en-en__original,over police violence,over police crackdown,EQUIVALENCE,BACKWARD_ENTAILMENT,0,0.5,EQUIV vs entailment confusion
+dico_phrasis_0001629__en-en__original,into strategic rebelheld town,on rebel-held town,FORWARD_ENTAILMENT,EQUIVALENCE,-1,0.125,EQUIV vs entailment confusion
+dico_phrasis_0000876__en-en__flipped,Two French journalists,2 French Journalists,EQUIVALENCE,FORWARD_ENTAILMENT,0,0.5,EQUIV vs entailment confusion
+dico_phrasis_0001590__en-en__flipped,for another term,for seventh term,BACKWARD_ENTAILMENT,EQUIVALENCE,0,0.5,EQUIV vs entailment confusion
+dico_phrasis_0000616__en-en__flipped,The wall-mounted flat-screen TV,of a television screen,FORWARD_ENTAILMENT,EQUIVALENCE,4,0.1,EQUIV vs entailment confusion
+dico_phrasis_0001221__en-en__original,a monochrome photograph,a black and white photo,EQUIVALENCE,BACKWARD_ENTAILMENT,-2,0.14285714285714285,followed length cue (longer side -> entails)
+dico_phrasis_0002510__en-en__original,as Manager,Ferguson,NEGATIVE_OTHER,FORWARD_ENTAILMENT,1,0.0,followed length cue (longer side -> entails)
+dico_phrasis_0003064__en-en__original,A red double decker bus,A white bus,NEGATIVE_OTHER,FORWARD_ENTAILMENT,2,0.3333333333333333,followed length cue (longer side -> entails)
+dico_phrasis_0001551__en-en__original,Saudis,Saudi Women,FORWARD_ENTAILMENT,BACKWARD_ENTAILMENT,-1,0.0,followed length cue (longer side -> entails)
+dico_phrasis_0002220__en-en__original,for Mali Town,Mali army,NEGATIVE_OTHER,FORWARD_ENTAILMENT,1,0.25,followed length cue (longer side -> entails)
+dico_phrasis_0001392__en-en__flipped,in Bhutto death,in 2007 Bhutto assassination,BACKWARD_ENTAILMENT,NEGATIVE_OTHER,-1,0.4,related pair rejected as NEG_OTHER
+dico_phrasis_0000859__en-en__original,at 91,aged 91,EQUIVALENCE,NEGATIVE_OTHER,0,0.3333333333333333,related pair rejected as NEG_OTHER
+dico_phrasis_0000875__en-en__flipped,fall sick,ill,EQUIVALENCE,NEGATIVE_OTHER,1,0.0,related pair rejected as NEG_OTHER
+dico_phrasis_0001047__en-en__original,Facebook earnings,Facebook profits,EQUIVALENCE,NEGATIVE_OTHER,0,0.3333333333333333,related pair rejected as NEG_OTHER
+dico_phrasis_0001062__en-en__flipped,since Rohani election,since Rowhani election,EQUIVALENCE,NEGATIVE_OTHER,0,0.5,related pair rejected as NEG_OTHER
+dico_phrasis_0002056__en-en__original,white water rafting,down the rapids,NEGATIVE_OTHER,EQUIVALENCE,0,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002493__en-en__original,Russia Pulled Back,of Russian Withdrawal,NEGATIVE_OTHER,EQUIVALENCE,0,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002938__en-en__original,in home museum,at his home,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.2,unrelated/contrastive predicted as related
+dico_phrasis_0002750__en-en__original,round up,arrest,NEGATIVE_OTHER,EQUIVALENCE,1,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002044__en-en__original,on the grass,by a tree,NEGATIVE_OTHER,EQUIVALENCE,0,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0003051__en-en__original,in a fenced area,in a gated yard,NEGATIVE_OTHER,EQUIVALENCE,0,0.3333333333333333,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002676__en-en__original,A young boy,A young girl,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.5,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002927__en-en__original,New World Trade Center,One World Trade Center,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.6,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002844__en-en__original,Northwest China,in China,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.3333333333333333,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002925__en-en__original,with network-sharing deal,"network-sharing , spectrum deal",NEGATIVE_OTHER,EQUIVALENCE,-1,0.5714285714285714,unrelated/contrastive predicted as related (high overlap)

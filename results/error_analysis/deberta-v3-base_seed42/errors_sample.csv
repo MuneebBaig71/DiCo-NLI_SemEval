@@ -1,0 +1,16 @@
+instance_id,text1,text2,label,pred,len_diff,jaccard,error_type
+dico_phrasis_0000023__en-en__original,pope,Pope Francis,BACKWARD_ENTAILMENT,EQUIVALENCE,-1,0.5,EQUIV vs entailment confusion
+dico_phrasis_0001525__en-en__original,through the grass,in the grass,FORWARD_ENTAILMENT,EQUIVALENCE,0,0.5,EQUIV vs entailment confusion
+dico_phrasis_0000466__en-en__flipped,A large sheep,A sheep,FORWARD_ENTAILMENT,EQUIVALENCE,1,0.6666666666666666,EQUIV vs entailment confusion
+dico_phrasis_0001880__en-en__flipped,a black and white cow,A black and white horned cow,BACKWARD_ENTAILMENT,EQUIVALENCE,-1,0.8333333333333334,EQUIV vs entailment confusion
+dico_phrasis_0000277__en-en__flipped,stroke,health problem,FORWARD_ENTAILMENT,EQUIVALENCE,-1,0.0,EQUIV vs entailment confusion
+dico_phrasis_0002056__en-en__original,white water rafting,down the rapids,NEGATIVE_OTHER,EQUIVALENCE,0,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002147__en-en__original,on Syrian chemical arms,over Syria chemical claims,NEGATIVE_OTHER,EQUIVALENCE,0,0.14285714285714285,unrelated/contrastive predicted as related
+dico_phrasis_0002933__en-en__original,Nigeria lawmaker,Nigerian MP,NEGATIVE_OTHER,EQUIVALENCE,0,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002141__en-en__original,in a sunlit forest,on a beach,NEGATIVE_OTHER,EQUIVALENCE,1,0.16666666666666666,unrelated/contrastive predicted as related
+dico_phrasis_0003044__en-en__original,stand,are posing,NEGATIVE_OTHER,EQUIVALENCE,-1,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0003294__en-en__original,A young boy,A small boy,NEGATIVE_OTHER,EQUIVALENCE,0,0.5,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002436__en-en__original,over child,over daughter,NEGATIVE_OTHER,EQUIVALENCE,0,0.3333333333333333,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002806__en-en__original,U.S. drone strike,Pakistan drone strike,NEGATIVE_OTHER,EQUIVALENCE,3,0.3333333333333333,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002772__en-en__original,against USD Thursday,against USD Tuesday,NEGATIVE_OTHER,EQUIVALENCE,0,0.5,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0003281__en-en__original,in a shop,in a cafe,NEGATIVE_OTHER,EQUIVALENCE,0,0.5,unrelated/contrastive predicted as related (high overlap)

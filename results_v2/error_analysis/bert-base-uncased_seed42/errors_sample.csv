@@ -1,0 +1,26 @@
+instance_id,text1,text2,label,pred,len_diff,jaccard,error_type
+dico_phrasis_0000345__en-en__flipped,after Zimmerman,George Zimmerman,FORWARD_ENTAILMENT,BACKWARD_ENTAILMENT,0,0.3333333333333333,EQUIV vs entailment confusion
+dico_phrasis_0000948__en-en__flipped,over police crackdown,over police violence,EQUIVALENCE,FORWARD_ENTAILMENT,0,0.5,EQUIV vs entailment confusion
+dico_phrasis_0000087__en-en__original,as his security adviser,as national security adviser,BACKWARD_ENTAILMENT,FORWARD_ENTAILMENT,0,0.6,EQUIV vs entailment confusion
+dico_phrasis_0000952__en-en__original,as rupee collapse,as rupee crisis,EQUIVALENCE,BACKWARD_ENTAILMENT,0,0.5,EQUIV vs entailment confusion
+dico_phrasis_0000979__en-en__flipped,after pro-Morsi protest,to pro-Morsi protests,EQUIVALENCE,BACKWARD_ENTAILMENT,0,0.42857142857142855,EQUIV vs entailment confusion
+dico_phrasis_0000994__en-en__flipped,May Housing,Housing in May,EQUIVALENCE,BACKWARD_ENTAILMENT,-1,0.6666666666666666,followed length cue (longer side -> entails)
+dico_phrasis_0002804__en-en__original,airline pilots,2 Turkish Airlines pilots,NEGATIVE_OTHER,BACKWARD_ENTAILMENT,-2,0.2,followed length cue (longer side -> entails)
+dico_phrasis_0003241__en-en__original,one,as one,NEGATIVE_OTHER,BACKWARD_ENTAILMENT,-1,0.5,followed length cue (longer side -> entails)
+dico_phrasis_0001131__en-en__original,their tires,the tires belonging to them,EQUIVALENCE,BACKWARD_ENTAILMENT,-3,0.16666666666666666,followed length cue (longer side -> entails)
+dico_phrasis_0001175__en-en__original,a heap,Pile,EQUIVALENCE,FORWARD_ENTAILMENT,1,0.0,followed length cue (longer side -> entails)
+dico_phrasis_0000801__en-en__flipped,towards the shore,in the direction of the shoreline,EQUIVALENCE,NEGATIVE_OTHER,-3,0.14285714285714285,related pair rejected as NEG_OTHER
+dico_phrasis_0000616__en-en__original,of a television screen,The wall-mounted flat-screen TV,BACKWARD_ENTAILMENT,NEGATIVE_OTHER,-4,0.1,related pair rejected as NEG_OTHER
+dico_phrasis_0000370__en-en__original,over Syria action,on Syria military action,BACKWARD_ENTAILMENT,NEGATIVE_OTHER,-1,0.4,related pair rejected as NEG_OTHER
+dico_phrasis_0001386__en-en__flipped,Palestinian,7 Palestinians,BACKWARD_ENTAILMENT,NEGATIVE_OTHER,-1,0.0,related pair rejected as NEG_OTHER
+dico_phrasis_0001221__en-en__flipped,a black and white photo,a monochrome photograph,EQUIVALENCE,NEGATIVE_OTHER,2,0.14285714285714285,related pair rejected as NEG_OTHER
+dico_phrasis_0003044__en-en__original,stand,are posing,NEGATIVE_OTHER,EQUIVALENCE,-1,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002933__en-en__original,Nigeria lawmaker,Nigerian MP,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002715__en-en__original,after China earthquake,in China quake,NEGATIVE_OTHER,EQUIVALENCE,0,0.2,unrelated/contrastive predicted as related
+dico_phrasis_0002493__en-en__original,Russia Pulled Back,of Russian Withdrawal,NEGATIVE_OTHER,EQUIVALENCE,0,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002242__en-en__original,Opens,begins operation,NEGATIVE_OTHER,EQUIVALENCE,-1,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002943__en-en__original,in first talks,first nuclear talks,NEGATIVE_OTHER,BACKWARD_ENTAILMENT,0,0.5,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002900__en-en__original,Australian senator,Australian lawmaker,NEGATIVE_OTHER,BACKWARD_ENTAILMENT,0,0.3333333333333333,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002772__en-en__original,against USD Thursday,against USD Tuesday,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.5,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002676__en-en__original,A young boy,A young girl,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.5,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0001952__en-en__original,out of the water,through the water,NEGATIVE_OTHER,BACKWARD_ENTAILMENT,1,0.4,unrelated/contrastive predicted as related (high overlap)

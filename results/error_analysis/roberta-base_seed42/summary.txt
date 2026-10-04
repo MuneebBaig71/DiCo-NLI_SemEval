@@ -1,0 +1,26 @@
+Model: roberta-base_seed42   dev accuracy 0.794
+
+Confusion matrix (rows = gold):
+pred                 FORWARD_ENTAILMENT  BACKWARD_ENTAILMENT  EQUIVALENCE  NEGATIVE_OTHER
+label                                                                                    
+FORWARD_ENTAILMENT                  163                    2           10              15
+BACKWARD_ENTAILMENT                   2                  165            9              14
+EQUIVALENCE                          11                    9          131              23
+NEGATIVE_OTHER                        7                   20           14              65
+
+Reversible-pair outcomes:
+pair type                          EQUIV pair  FWD/BWD pair  All
+outcome                                                         
+both directions correct                    62           159  221
+consistent but wrong                        5             8   13
+one direction predicted NEG_OTHER          13            17   30
+other inconsistency                         7             6   13
+All                                        87           190  277
+
+Error types (heuristic tags):
+error_type
+related pair rejected as NEG_OTHER                           52
+followed length cue (longer side -> entails)                 31
+EQUIV vs entailment confusion                                29
+unrelated/contrastive predicted as related (high overlap)    13
+unrelated/contrastive predicted as related                   11

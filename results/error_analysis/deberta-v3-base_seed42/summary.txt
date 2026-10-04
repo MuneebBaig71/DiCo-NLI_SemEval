@@ -1,0 +1,22 @@
+Model: deberta-v3-base_seed42   dev accuracy 0.264
+
+Confusion matrix (rows = gold):
+pred                 FORWARD_ENTAILMENT  BACKWARD_ENTAILMENT  EQUIVALENCE  NEGATIVE_OTHER
+label                                                                                    
+FORWARD_ENTAILMENT                    0                    0          190               0
+BACKWARD_ENTAILMENT                   0                    0          190               0
+EQUIVALENCE                           0                    0          174               0
+NEGATIVE_OTHER                        0                    0          106               0
+
+Reversible-pair outcomes:
+pair type                EQUIV pair  FWD/BWD pair  All
+outcome                                               
+both directions correct          87             0   87
+consistent but wrong              0           190  190
+All                              87           190  277
+
+Error types (heuristic tags):
+error_type
+EQUIV vs entailment confusion                                380
+unrelated/contrastive predicted as related (high overlap)     61
+unrelated/contrastive predicted as related                    45

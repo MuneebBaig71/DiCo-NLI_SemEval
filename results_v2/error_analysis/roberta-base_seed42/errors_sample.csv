@@ -1,0 +1,26 @@
+instance_id,text1,text2,label,pred,len_diff,jaccard,error_type
+dico_phrasis_0001685__en-en__flipped,closes,abruptly closes,BACKWARD_ENTAILMENT,EQUIVALENCE,-1,0.5,EQUIV vs entailment confusion
+dico_phrasis_0001505__en-en__flipped,Two Asian men and a woman,Two Asian men and Asian woman,BACKWARD_ENTAILMENT,EQUIVALENCE,0,0.8333333333333334,EQUIV vs entailment confusion
+dico_phrasis_0001841__en-en__original,Several people,People,FORWARD_ENTAILMENT,BACKWARD_ENTAILMENT,1,0.5,EQUIV vs entailment confusion
+dico_phrasis_0000449__en-en__flipped,A black car,A black vehicle,FORWARD_ENTAILMENT,EQUIVALENCE,0,0.5,EQUIV vs entailment confusion
+dico_phrasis_0001156__en-en__flipped,on green grass,on a lawn,EQUIVALENCE,FORWARD_ENTAILMENT,0,0.2,EQUIV vs entailment confusion
+dico_phrasis_0001136__en-en__original,along a city path,on the street,EQUIVALENCE,FORWARD_ENTAILMENT,1,0.0,followed length cue (longer side -> entails)
+dico_phrasis_0000875__en-en__original,ill,fall sick,EQUIVALENCE,BACKWARD_ENTAILMENT,-1,0.0,followed length cue (longer side -> entails)
+dico_phrasis_0002406__en-en__original,in Canada Oil Train Explosion,in Canada train crash,NEGATIVE_OTHER,FORWARD_ENTAILMENT,1,0.5,followed length cue (longer side -> entails)
+dico_phrasis_0000721__en-en__flipped,Rabbi Ovadia Yosef,Ovadia Yosef,EQUIVALENCE,FORWARD_ENTAILMENT,1,0.6666666666666666,followed length cue (longer side -> entails)
+dico_phrasis_0002244__en-en__original,two people,2,NEGATIVE_OTHER,FORWARD_ENTAILMENT,1,0.0,followed length cue (longer side -> entails)
+dico_phrasis_0000954__en-en__original,martial arts clubs,Martial Arts Schools,EQUIVALENCE,NEGATIVE_OTHER,0,0.5,related pair rejected as NEG_OTHER
+dico_phrasis_0001562__en-en__flipped,from Japan tunnel,in collapsed Japan tunnel,BACKWARD_ENTAILMENT,NEGATIVE_OTHER,-1,0.4,related pair rejected as NEG_OTHER
+dico_phrasis_0000711__en-en__original,to pay off,of bribing,EQUIVALENCE,NEGATIVE_OTHER,1,0.0,related pair rejected as NEG_OTHER
+dico_phrasis_0000125__en-en__flipped,in an overgrown green grassy field,through green grass,FORWARD_ENTAILMENT,NEGATIVE_OTHER,3,0.125,related pair rejected as NEG_OTHER
+dico_phrasis_0001675__en-en__flipped,Rafa Nadal,ailing Nadal,BACKWARD_ENTAILMENT,NEGATIVE_OTHER,0,0.3333333333333333,related pair rejected as NEG_OTHER
+dico_phrasis_0002463__en-en__original,'s integration,to join,NEGATIVE_OTHER,EQUIVALENCE,0,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002938__en-en__original,in home museum,at his home,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.2,unrelated/contrastive predicted as related
+dico_phrasis_0002567__en-en__original,shaving,is carving,NEGATIVE_OTHER,EQUIVALENCE,-1,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002671__en-en__original,performs,to do,NEGATIVE_OTHER,EQUIVALENCE,-1,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002300__en-en__original,on a runway,close to the ground,NEGATIVE_OTHER,FORWARD_ENTAILMENT,-1,0.0,unrelated/contrastive predicted as related
+dico_phrasis_0002900__en-en__original,Australian senator,Australian lawmaker,NEGATIVE_OTHER,EQUIVALENCE,0,0.3333333333333333,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0001949__en-en__original,Syria opposition unity,Syria divided opposition,NEGATIVE_OTHER,EQUIVALENCE,0,0.5,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002527__en-en__original,rabbi and Israeli kingmaker,kingmaker of Israeli politics,NEGATIVE_OTHER,FORWARD_ENTAILMENT,0,0.3333333333333333,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002597__en-en__original,on a red play structure,on a red jungle gym,NEGATIVE_OTHER,BACKWARD_ENTAILMENT,0,0.42857142857142855,unrelated/contrastive predicted as related (high overlap)
+dico_phrasis_0002898__en-en__original,may be trapped,trapped,NEGATIVE_OTHER,EQUIVALENCE,2,0.3333333333333333,unrelated/contrastive predicted as related (high overlap)

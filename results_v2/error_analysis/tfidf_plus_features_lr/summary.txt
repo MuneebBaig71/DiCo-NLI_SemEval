@@ -1,0 +1,27 @@
+Model: tfidf_plus_features_lr   dev accuracy 0.626
+
+Confusion matrix (rows = gold):
+pred                 FORWARD_ENTAILMENT  BACKWARD_ENTAILMENT  EQUIVALENCE  NEGATIVE_OTHER
+label                                                                                    
+FORWARD_ENTAILMENT                  148                    7           23              12
+BACKWARD_ENTAILMENT                   9                  143           25              13
+EQUIVALENCE                          29                   27           87              31
+NEGATIVE_OTHER                       22                   20           29              35
+
+Reversible-pair outcomes:
+pair type                               EQUIV pair  FWD/BWD pair  All
+outcome                                                              
+both directions correct                         40           143  183
+consistent but wrong                            25            29   54
+direction-blind (same label both ways)           2             2    4
+one direction predicted NEG_OTHER               19            16   35
+other inconsistency                              1             0    1
+All                                             87           190  277
+
+Error types (heuristic tags):
+error_type
+EQUIV vs entailment confusion                                80
+followed length cue (longer side -> entails)                 68
+related pair rejected as NEG_OTHER                           56
+unrelated/contrastive predicted as related                   23
+unrelated/contrastive predicted as related (high overlap)    20

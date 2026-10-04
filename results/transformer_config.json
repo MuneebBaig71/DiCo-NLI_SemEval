@@ -1,0 +1,15 @@
+{
+  "epochs": 4,
+  "lr": 2e-05,
+  "batch_size": 16,
+  "max_len": 64,
+  "warmup": 0.1,
+  "weight_decay": 0.01,
+  "models": [
+    "bert-base-uncased",
+    "microsoft/deberta-v3-base"
+  ],
+  "seeds": [
+    42
+  ]
+}

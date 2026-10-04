@@ -1,0 +1,62 @@
+train: 3042 instances, 1760 source pairs
+dev: 660 instances, 383 source pairs
+pair_id overlap train/dev: 0
+missing values: 0
+empty texts: 0
+identical text1==text2: 0
+1-word phrase on either side: 698 (18.9%)
+max phrase length (tokens): 15
+duplicated (text1,text2) rows: 116
+  duplicated with DIFFERENT labels: 1 pairs
+dev rows whose exact (text1,text2) is also in train: 7
+
+rows per pair_id by label (NEGATIVE_OTHER has no flipped copy):
+pair_id                1     2
+label                         
+BACKWARD_ENTAILMENT    0  1071
+EQUIVALENCE            0   976
+FORWARD_ENTAILMENT     0  1071
+NEGATIVE_OTHER       584     0
+
+label distribution (share of rows):
+split                  dev  train
+label                            
+BACKWARD_ENTAILMENT  0.288  0.290
+EQUIVALENCE          0.264  0.264
+FORWARD_ENTAILMENT   0.288  0.290
+NEGATIVE_OTHER       0.161  0.157
+
+=== Length ===
+                     len1  len2  len_diff
+label                                    
+BACKWARD_ENTAILMENT  2.44  3.58     -1.14
+EQUIVALENCE          3.24  3.24      0.00
+FORWARD_ENTAILMENT   3.58  2.44      1.14
+NEGATIVE_OTHER       3.16  3.16      0.00
+FORWARD with text1 longer: 0.769
+BACKWARD with text1 shorter: 0.769
+EQUIV with equal length: 0.277
+
+=== Overlap / containment ===
+                     jaccard  contains_1_in_2  contains_2_in_1
+label                                                         
+BACKWARD_ENTAILMENT    0.409            0.445            0.020
+EQUIVALENCE            0.238            0.038            0.038
+FORWARD_ENTAILMENT     0.409            0.020            0.445
+NEGATIVE_OTHER         0.274            0.014            0.014
+
+=== Semantic similarity (MiniLM cosine) ===
+                      mean    50%    std
+label                                   
+BACKWARD_ENTAILMENT  0.736  0.769  0.153
+EQUIVALENCE          0.721  0.757  0.172
+FORWARD_ENTAILMENT   0.736  0.769  0.153
+NEGATIVE_OTHER       0.618  0.650  0.197
+
+=== Vocabulary ===
+train: 9425 tokens, 2240 types, hapax share 0.469
+dev OOV token rate w.r.t. train: 0.154
+MTLD FORWARD_ENTAILMENT  : 100.9
+MTLD BACKWARD_ENTAILMENT : 94.5
+MTLD EQUIVALENCE         : 36.4
+MTLD NEGATIVE_OTHER      : 96.0
