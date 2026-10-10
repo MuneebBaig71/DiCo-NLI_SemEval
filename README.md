@@ -2,7 +2,7 @@
 
 Track 1 (English). Official train/dev split, scored with the organizers' official scorer.
 
-## Run on Colab (teammates start here)
+## Run on Colab 
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MuneebBaig71/DiCo-NLI_SemEval/blob/main/assignment1_dico_nli_v2_colab.ipynb)
 
