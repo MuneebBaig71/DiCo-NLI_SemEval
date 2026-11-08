@@ -1,0 +1,242 @@
+\documentclass[10pt,a4paper,twocolumn]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[margin=0.75in,columnsep=0.3in]{geometry}
+\usepackage{dblfloatfix}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage[round]{natbib}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,fit,calc}
+
+\setlength{\parskip}{0.2em}
+\raggedbottom
+
+\newcommand{\Eq}{\textsc{Eq}}
+\newcommand{\Fwd}{\textsc{Fwd}}
+\newcommand{\Bwd}{\textsc{Bwd}}
+\newcommand{\Neg}{\textsc{Neg}}
+\newcommand{\sd}[1]{\,{\scriptsize$\pm$#1}}
+
+\title{Stronger Encoders and Structure-Constrained Decoding\\ for DiCo-NLI (Track 1)}
+\author{Muhammad Muneeb Baig, Syed Kamran Ali Shah, Kashaf Ali Haroon\\ MS Data Science, SEECS, NUST\\ CS-878 Deep Learning, Assignment 2}
+\date{November 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+In Assignment~1 (A1), a fine-tuned RoBERTa-base reached 0.765 weighted F1 (W-F1) and 0.739 HardCons on the DiCo-NLI English development set, with most remaining errors on the \Neg{} boundary rather than on direction. Here we propose and test four changes: a stronger encoder (DeBERTa-v3-base), a reversal-consistency training loss, \Neg{} class weighting, and inference-time decoding rules that use the pair structure of the data. Over three seeds, DeBERTa-v3 improves argmax W-F1 from 0.758 to 0.821 and HardCons from 0.759 to 0.839. Symmetric decoding adds 2--6 HardCons points at no training cost. A property of the released data (rows with a reversed partner are never \Neg, rows without one always are) gives the largest gain, to 0.925 W-F1 and 0.911 HardCons, but it is dataset-specific. The consistency loss shows no robust benefit. A three-seed ensemble scores 0.936 W-F1 and 0.924 HardCons, confirmed by a development-phase Codabench submission.
+\end{abstract}
+
+\section{Introduction}
+
+DiCo-NLI (SemEval-2027 Task~2) asks a classifier to label an ordered phrase pair $(t_1,t_2)$ as \Eq, \Fwd, \Bwd{} or \Neg, and scores both classification and directional coherence \citep{diconli2026}. A coherent model satisfies $f(t_2,t_1)=\mathrm{rev}(f(t_1,t_2))$ with $\mathrm{rev}(\Fwd)=\Bwd$, $\mathrm{rev}(\Bwd)=\Fwd$, $\mathrm{rev}(\Eq)=\Eq$. A1 established baselines and found three things: a length-only classifier is highly consistent yet mostly wrong; fine-tuned encoders rarely confuse \Fwd{} with \Bwd; and their errors concentrate on whether a related pair is \Neg.
+
+This assignment proposes an approach built on those findings and designs the experiments to test it. We separate three questions: (i) does a stronger encoder help? (ii) does consistency-aware training help beyond the encoder? (iii) how much comes from exploiting the structure of the data rather than from better language understanding? The third question matters because a decoding rule can raise every metric without the model learning anything.
+
+\section{Justification}
+\label{sec:just}
+
+\textbf{Evidence from A1.} RoBERTa's per-class F1 was 0.839 (\Fwd), 0.839 (\Bwd), 0.725 (\Eq) and 0.565 (\Neg). Its largest error group (69 rows) was rejecting near-paraphrases as \Neg. On reversible pairs, it confused \Fwd{} with \Bwd{} only twice in each direction. A1 reported 42 pairs in the category ``\Neg{} in one direction only''; on re-inspection that category also counted pairs predicted \Neg{} in both directions. The strictly one-sided count is 15 for seed~42, and 15--19 per seed in our reruns. These errors cost both SoftCons and HardCons, and they cannot occur if both orientations are decided together.
+
+\textbf{Pair structure.} The training set has 1,282 pairs present in both orientations ($2\times1{,}282=2{,}564$ rows) and 478 rows present in one orientation only, for 3,042 rows in total. In both train and dev, \emph{every} row with a reversed partner is non-\Neg{} and \emph{every} row without one is \Neg. Partners can be identified from \texttt{pair\_id} in the participant file, which is available at test time; no gold label is needed. We treat this as an observed property of the released data, not a guarantee for the hidden test set. It also explains why most top leaderboard entries (9 of the other 25 English submissions on 8 November) report SoftCons of exactly 1.0: SoftCons fails a pair whenever either prediction is \Neg, so a perfect score means no reversible pair was ever labelled \Neg.
+
+\textbf{Encoder.} DeBERTa-v3 \citep{he2023debertav3} was the strongest model in the organisers' pilot. It was dropped in A1 because training produced NaN losses on Apple MPS. Training in fp32 on CUDA removes that obstacle.
+
+\textbf{Consistency training.} Logical constraints have previously been added to NLI training as differentiable regularisers \citep{minervini2018adversarially,li2019logic}. The reversal rule is such a constraint, so we test whether enforcing it during training helps.
+
+\section{Proposed Method}
+\label{sec:method}
+
+Figure~\ref{fig:arch} shows the pipeline. The model is a cross-encoder that reads ``[CLS] $t_1$ [SEP] $t_2$'' and outputs a distribution $p_{12}=\mathrm{softmax}(f_\theta(t_1,t_2))$ over the four labels.
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[
+  box/.style={draw,rounded corners=2pt,align=center,font=\scriptsize,minimum height=0.6cm,inner sep=3pt},
+  arr/.style={-{Stealth[length=4pt]},thick},
+  node distance=0.32cm and 0.35cm]
+\node[box] (a) {$(t_1,t_2)$};
+\node[box,right=of a] (b) {$(t_2,t_1)$};
+\node[box,below=0.45cm of $(a)!0.5!(b)$,minimum width=3.6cm,fill=gray!12] (enc) {Shared DeBERTa-v3 encoder\\ + linear head};
+\draw[arr] (a) -- (a |- enc.north);
+\draw[arr] (b) -- (b |- enc.north);
+\node[box,below left=0.45cm and -0.9cm of enc] (p1) {$p_{12}$};
+\node[box,below right=0.45cm and -0.9cm of enc] (p2) {$p_{21}$};
+\draw[arr] (enc.south -| p1) -- (p1);
+\draw[arr] (enc.south -| p2) -- (p2);
+\coordinate (j) at ($(p1)!0.5!(p2)+(0,-0.55)$);
+\draw[thick] (p1.south) |- (j); \draw[thick] (p2.south) |- (j);
+\node[box,below left=0.45cm and 0.1cm of j,text width=2.9cm] (tr) {\textbf{Training}\\ weighted CE on both rows\\ $+\,\lambda\,\mathcal{L}_{\mathrm{cons}}\big(p_{12},\pi(p_{21})\big)$};
+\node[box,below right=0.45cm and 0.1cm of j,text width=2.6cm] (de) {\textbf{Decoding}\\ argmax / symmetric /\\ struct\_pair / struct\_full};
+\draw[arr] (j) -- (tr.north); \draw[arr] (j) -- (de.north);
+\end{tikzpicture}
+\caption{Proposed pipeline. Both orientations of a pair go through the same encoder in the same batch. $\pi$ swaps the \Fwd{} and \Bwd{} probabilities. Rows without a partner (all \Neg{} in train) receive only the cross-entropy term.}
+\label{fig:arch}
+\end{figure}
+
+\textbf{Pair-aware batching.} Batches are built from pairs, not rows: a reversible pair always contributes both orientations to the same batch, and a single row contributes itself. This makes the consistency term computable within a batch.
+
+\textbf{Training objective.} Let $\pi$ be the label permutation that maps a distribution for $(t_2,t_1)$ onto the label space of $(t_1,t_2)$: it keeps \Eq{} and \Neg{} and swaps \Fwd{} and \Bwd. For each pair in the batch,
+\begin{equation}
+\mathcal{L}_{\mathrm{cons}}=\tfrac12\Big[\mathrm{KL}\big(p_{12}\,\|\,\pi(p_{21})\big)+\mathrm{KL}\big(\pi(p_{21})\,\|\,p_{12}\big)\Big],
+\end{equation}
+and the total loss is
+\begin{equation}
+\mathcal{L}=\mathrm{CE}_w(y,p)+\lambda\,\overline{\mathcal{L}_{\mathrm{cons}}},
+\end{equation}
+where $\mathrm{CE}_w$ is cross-entropy over all rows, with weight $w_{\Neg}$ on the \Neg{} class and 1 elsewhere, and the bar denotes the mean over pairs in the batch. Single (\Neg) rows have no partner, so they receive only the cross-entropy term.
+
+\textbf{Decoding rules.} These change only how labels are chosen, so they apply to any trained model:
+\begin{itemize}\setlength\itemsep{0pt}
+\item \textbf{argmax}: $\hat y=\arg\max p_{12}$, as in A1.
+\item \textbf{symmetric}: for a row with a partner, $\tilde p_{12}=\tfrac12\big(p_{12}+\pi(p_{21})\big)$, and its partner receives $\pi(\tilde p_{12})$. The two labels are then consistent by construction.
+\item \textbf{struct\_pair}: symmetric, and rows with a partner may not be \Neg.
+\item \textbf{struct\_full}: struct\_pair, and rows without a partner are labelled \Neg.
+\end{itemize}
+The last two rules use the pair structure of Section~\ref{sec:just}. struct\_full changes only rows without a partner, which never enter SoftCons or HardCons, so it can raise W-F1 but not HardCons relative to struct\_pair.
+
+\section{Comparison Systems}
+
+We compare systems along two separate axes: what is trained, and how labels are decoded. Every trained system is evaluated under all four decoding rules.
+
+\begin{itemize}\setlength\itemsep{0pt}
+\item \textbf{A1 baselines}: majority class, length-only and feature-based logistic regression, BERT-base and RoBERTa-base (reported in A1).
+\item \textbf{M0}: RoBERTa-base retrained under the A2 protocol, so that it is directly comparable with the new systems.
+\item \textbf{M1}: DeBERTa-v3-base, cross-entropy only.
+\item \textbf{M2}: M1 + consistency loss ($\lambda=1$).
+\item \textbf{M2b}: M2 with $\lambda=0.5$, one seed, as a sensitivity check.
+\item \textbf{M3}: M2 + \Neg{} weighting ($w_{\Neg}=2$).
+\item \textbf{Ensembles}: for each system, the three seeds' dev probabilities are averaged and decoded once.
+\end{itemize}
+The development leaderboard is used as external context only. Its top entries reach W-F1 above 0.95, which is likely to involve training on the public dev labels, so they are not a like-for-like comparison.
+
+\section{Evaluation Measures}
+
+We use the organisers' scorer unchanged. \textbf{W-F1}, the main score, averages per-class F1 weighted by class support over all 660 dev rows. \textbf{SoftCons} is the fraction of the 277 reversible dev pairs whose two predictions follow the reversal rule with neither being \Neg; it ignores gold labels. \textbf{HardCons} is the fraction of those pairs with both orientations correct, so $\mathrm{HardCons}\le\mathrm{SoftCons}$. We also report Macro-F1 and per-class F1, because \Neg{} is the smallest class (16\%). As a diagnostic we count strictly one-sided \Neg{} pairs.
+
+Because SoftCons can be maximised without being correct (the length-only model in A1 scored 0.989), we judge every change on W-F1 and HardCons together, never on SoftCons alone.
+
+\section{Experimental Protocol}
+
+\textbf{Splits.} We hold out 10\% of the training set as a validation split, grouped by \texttt{pair\_id} so that a pair and its reverse never cross the split. Paired and single groups are sampled separately, preserving the label mix: 128 pairs and 48 singles (304 rows), leaving 2,738 training rows. The split uses a fixed seed (2027) and is identical for every run. Since no \texttt{pair\_id} is shared between train and dev, there is no reversal leakage into dev.
+
+\textbf{Training.} AdamW, learning rate $2\times10^{-5}$, weight decay 0.01, linear warm-up over 10\% of steps, gradient-norm clipping at 1.0, 8 pairs (about 16 rows) per batch, maximum length 64 tokens, 6 epochs, fp32 throughout. Each configuration is trained with seeds 13, 42 and 87 on a Colab T4 GPU (about 2 minutes per RoBERTa run and 3.3 minutes per DeBERTa run).
+
+\textbf{Model selection.} After each epoch we compute argmax W-F1 on the validation split, and keep the best epoch. The dev set is never used for checkpoint selection or hyperparameter tuning.
+
+\textbf{Reporting.} For each system we report the mean $\pm$ sample standard deviation over the three seeds, each scored separately. Ensembles are reported separately as single systems. A manifest in the repository maps every number to its configuration and prediction file, and all scores were recomputed from the saved probabilities (agreement with the original runs to within $10^{-16}$).
+
+\textbf{Use of dev.} Dev was not used to select checkpoints, but it was used to compare decoding rules and configurations, so the final configuration is informed by dev results. The dev scores below are therefore not an independent estimate of test performance.
+
+\section{Initial Implementation and Results}
+
+\textbf{Implementation.} The pipeline is implemented in PyTorch and Hugging Face Transformers. \texttt{src/train\_a2.py} handles pair-aware batching, the loss and validation-based selection; \texttt{src/decoding.py} implements the four rules; \texttt{06\_decoding\_experiments.py} scores every model under every rule; and a Colab notebook runs the full set of experiments. All code and results are in the project repository.
+
+\begin{table*}[!t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{l cc cc cc cc}
+\toprule
+& \multicolumn{2}{c}{argmax} & \multicolumn{2}{c}{symmetric} & \multicolumn{2}{c}{struct\_pair} & \multicolumn{2}{c}{struct\_full} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}
+System & W-F1 & HardCons & W-F1 & HardCons & W-F1 & HardCons & W-F1 & HardCons \\
+\midrule
+M0 RoBERTa & 0.758\sd{.026} & 0.759\sd{.025} & 0.768\sd{.034} & 0.821\sd{.025} & 0.803\sd{.036} & 0.869\sd{.026} & 0.889\sd{.022} & 0.869\sd{.026} \\
+M1 DeBERTa-v3 & 0.821\sd{.006} & \textbf{0.839}\sd{.006} & 0.821\sd{.006} & \textbf{0.862}\sd{.015} & 0.853\sd{.010} & 0.904\sd{.008} & 0.919\sd{.006} & 0.904\sd{.008} \\
+M2 + cons. & 0.820\sd{.005} & 0.827\sd{.011} & 0.822\sd{.005} & 0.845\sd{.006} & 0.870\sd{.013} & 0.909\sd{.008} & 0.923\sd{.007} & 0.909\sd{.008} \\
+M3 + \Neg{} wt. & \textbf{0.827}\sd{.004} & 0.828\sd{.015} & \textbf{0.824}\sd{.004} & 0.842\sd{.006} & \textbf{0.877}\sd{.010} & \textbf{0.911}\sd{.004} & \textbf{0.925}\sd{.004} & \textbf{0.911}\sd{.004} \\
+\bottomrule
+\end{tabular}
+\caption{Dev results, mean $\pm$ std over seeds 13, 42 and 87 (official scorer). SoftCons is 1.0 for both structural rules by construction. Under argmax it is 0.819, 0.892, 0.884 and 0.878 for M0--M3, and under symmetric 0.919, 0.931, 0.910 and 0.906. Bold marks the best mean in each column; most gaps between M1, M2 and M3 are within one standard deviation.}
+\label{tab:main}
+\end{table*}
+
+\begin{table}[!t]
+\centering
+\small
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{l cccc c}
+\toprule
+& \multicolumn{4}{c}{Per-class F1 (argmax)} & \\
+\cmidrule(lr){2-5}
+System & \Eq & \Fwd & \Bwd & \Neg & Macro-F1 \\
+\midrule
+M0 & 0.719 & 0.864 & 0.823 & 0.516 & 0.730 \\
+M1 & 0.813 & 0.882 & 0.880 & 0.620 & 0.799 \\
+M2 & 0.801 & 0.879 & 0.883 & 0.633 & 0.799 \\
+M3 & 0.809 & 0.889 & 0.884 & \textbf{0.643} & \textbf{0.806} \\
+\bottomrule
+\end{tabular}
+\caption{Per-class F1 under argmax, mean of three seeds. Under struct\_full, \Neg{} F1 is 1.000 for every system by construction; \Eq{} rises to 0.80--0.87 and \Fwd/\Bwd{} to 0.90--0.93.}
+\label{tab:perclass}
+\end{table}
+
+\begin{table}[!t]
+\centering
+\small
+\begin{tabular}{l cc cc}
+\toprule
+& \multicolumn{2}{c}{argmax} & \multicolumn{2}{c}{struct\_full} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Ensemble & W-F1 & Hard & W-F1 & Hard \\
+\midrule
+M0 & 0.784 & 0.794 & 0.912 & 0.895 \\
+M1 & 0.823 & 0.845 & 0.928 & 0.913 \\
+M2 & 0.830 & 0.845 & 0.930 & 0.917 \\
+M3 & \textbf{0.832} & 0.830 & \textbf{0.936} & \textbf{0.924} \\
+\bottomrule
+\end{tabular}
+\caption{Three-seed probability ensembles on dev (single systems, not means). The M3 struct\_full ensemble was submitted to the Codabench development phase.}
+\label{tab:ens}
+\end{table}
+
+\textbf{Protocol check.} M0 reproduces the A1 RoBERTa result (argmax 0.758 vs.\ 0.765 W-F1, within seed variation), so the new split and selection rule do not distort the comparison with A1.
+
+\textbf{Encoder.} DeBERTa-v3 is the largest training-side gain (Table~\ref{tab:main}): +6.3 W-F1 and +8.0 HardCons under argmax, with seed standard deviations about four times smaller than RoBERTa's. Its gains are largest on \Eq{} (+0.094 F1) and \Neg{} (+0.104 F1), the two classes A1 identified as hardest (Table~\ref{tab:perclass}). With fp32 training no NaN losses occurred.
+
+\textbf{Symmetric decoding.} Averaging each row with its partner's label-swapped prediction raises HardCons by 2--6 points for every system, with W-F1 unchanged or slightly higher, and removes all one-sided \Neg{} pairs. It costs no training.
+
+\textbf{Structure-constrained decoding.} This is the largest gain: about +10 W-F1 over argmax for every system. Per-class results show where it comes from: \Neg{} F1 becomes 1.000 on dev, because the rule assigns \Neg{} exactly to the rows without a partner. This gain reflects the construction of the dataset rather than better language understanding, and it transfers to the test set only if the test set is built the same way. Applied to the saved A1 models, the same rules raise RoBERTa from 0.765 to 0.874 W-F1 and BERT from 0.705 to 0.838, so the effect does not depend on the A2 models.
+
+\textbf{Consistency loss: a negative result.} Under argmax, M2 has \emph{lower} HardCons than M1 (0.827 vs.\ 0.839), and its one-sided \Neg{} count falls from 9.0 to 6.7 per seed. Our interpretation is that the loss can be satisfied by predicting \Neg{} in both orientations, which removes one-sided errors without making either prediction correct. Under the structural rules M2 is slightly ahead of M1, but the gap is within one standard deviation. After two seeds the gain looked clearer; the third seed reversed it (struct\_full 0.915 for M2 vs.\ 0.927 for M1). The one-seed check with $\lambda=0.5$ was no better (argmax 0.814, struct\_full 0.921). We conclude that the consistency loss has no robust benefit in this setting. This is plausible given A1: the loss enforces directional agreement, while the encoders' remaining errors are mostly about \Neg, not direction.
+
+\textbf{\Neg{} weighting.} M3 gives the best argmax W-F1, \Neg{} F1 and Macro-F1, and the lowest variance under struct\_full, but its margins over M2 are small and untested for significance. We report M3 as the best tested configuration, not as evidence that each of its components helps.
+
+\textbf{Ensembling.} Averaging three seeds adds about one W-F1 point to every system and preserves their order (Table~\ref{tab:ens}).
+
+\textbf{External check.} We submitted the M3 struct\_full ensemble, English only, to the Codabench development phase. It scored 0.936 W-F1, 1.0 SoftCons and 0.924 HardCons, identical to our local scorer, and ranked 7th of 26 English submissions at the time. This confirms the submission format and the local scorer. It is not an estimate of test performance, for the reason given under ``Use of dev''.
+
+\textbf{Reproducibility note.} M1's struct\_full W-F1 is identical to 16 decimal places for seeds 13 and 42. This is not a duplicated run: the seeds disagree on 24 dev rows, but each gets exactly 12 of them right, in mirrored \Fwd/\Bwd-versus-\Eq{} swaps, so the confusion counts coincide. Symmetric decoding makes errors come in mirrored pairs, which makes such ties more likely.
+
+\section{Limitations and Plan for Assignment 3}
+
+\textbf{Limitations.} (1) The structural rules depend on a property seen in train and dev that may not hold for the test set; we will report results with and without them. (2) Dev informed the choice of configuration, so dev scores are optimistic. (3) Three seeds are few, and no significance tests have been run yet, so small differences between M1, M2 and M3 should not be interpreted. (4) Checkpoints are selected by argmax validation W-F1, although the best results use structured decoding; selection under the decoding rule might choose different epochs. (5) Only English is covered.
+
+\textbf{Planned experiments.} Under the structural rules, every remaining error is an \Eq/\Fwd/\Bwd{} choice on a paired row (about 21 of 277 pairs for the best ensemble). A3 will target that decision:
+\begin{itemize}\setlength\itemsep{0pt}
+\item \textbf{NLI-pretrained initialisation}: starting from a DeBERTa-v3 checkpoint already fine-tuned on MNLI-style data, which already models entailment and paraphrase.
+\item \textbf{Three-class paired model}: training only on paired rows with \Eq/\Fwd/\Bwd{} labels, since \Neg{} is decided structurally; this also removes the ``\Neg{} both ways'' solution that undermined the consistency loss.
+\item \textbf{Joint pair decoding}: choosing among the three valid joint labellings, (\Eq,\Eq), (\Fwd,\Bwd) and (\Bwd,\Fwd), by summed log-probability.
+\item \textbf{DeBERTa-v3-large} and \textbf{cross-backbone ensembles} \citep{lakshminarayanan2017simple}.
+\item \textbf{Checkpoint selection under the final decoding rule}.
+\item \textbf{Significance testing}: paired bootstrap over dev pairs for W-F1 and HardCons, with more seeds where compute allows.
+\item \textbf{Error analysis} of the remaining wrong pairs, including how many have debatable gold labels.
+\end{itemize}
+A3 will also cover full ablations, comparison with related work, and the final paper-style report.
+
+\section{Conclusion}
+
+The two improvements that hold up are of different kinds. A stronger encoder genuinely improves classification (+6 W-F1, +8 HardCons) and is far more stable across seeds. Structure-constrained decoding gives a larger gain, but it relies on how the dataset was built, and we report it as such. Consistency-aware training, the most obvious way to target directional coherence, did not help, most likely because directional errors were already rare. The next step is the paired \Eq/\Fwd/\Bwd{} decision, where every remaining error now lies.
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
