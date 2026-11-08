@@ -1,8 +1,8 @@
 """A2 step 1: test decoding rules on saved dev probabilities (no training).
 
 Usage:
-    python 06_decoding_experiments.py                      # all *_probs.csv in results/predictions
-    python 06_decoding_experiments.py path/to/model_probs.csv
+    python 06_decoding_experiments.py                      # all A2 runs: results_a2/predictions/*_dev_probs.csv
+    python 06_decoding_experiments.py results_v2/predictions/*_probs.csv   # A1 models
 
 Writes results_a2/decoding/<model>__<mode>.csv and results_a2/decoding_results.csv
 """
@@ -17,12 +17,12 @@ from src.decoding import MODES, load_probs, partner_index, decode, one_sided_neg
 OUT = Path("results_a2/decoding")
 OUT.mkdir(parents=True, exist_ok=True)
 
-files = [Path(a) for a in sys.argv[1:]] or sorted(Path("results/predictions").glob("*_probs.csv"))
+files = [Path(a) for a in sys.argv[1:]] or sorted(Path("results_a2/predictions").glob("*_dev_probs.csv"))
 participant = pd.read_csv(split_path("dev", "participant_labeled"), keep_default_na=False)
 
 rows = []
 for f in files:
-    model = f.stem.replace("_probs", "")
+    model = f.stem.replace("_dev_probs", "").replace("_probs", "")
     ids, probs = load_probs(f)
     partner = partner_index(ids, participant)
     for mode in MODES:
