@@ -1,0 +1,61 @@
+{
+  "cfg": {
+    "model": "roberta-base",
+    "seed": 87,
+    "epochs": 6,
+    "lr": 2e-05,
+    "batch_pairs": 8,
+    "max_len": 64,
+    "warmup": 0.1,
+    "weight_decay": 0.01,
+    "lambda_cons": 0.0,
+    "neg_weight": 1.0,
+    "val_frac": 0.1,
+    "split_seed": 2027,
+    "max_train_rows": null,
+    "out_dir": "results_a2",
+    "tag": "M0_roberta_seed87"
+  },
+  "tag": "M0_roberta_seed87",
+  "best_epoch": 6,
+  "best_val_wf1": 0.8164336320262249,
+  "history": [
+    {
+      "epoch": 1,
+      "ce": 1.36384603471467,
+      "cons": 0.0,
+      "val_wf1": 0.35079978242456566
+    },
+    {
+      "epoch": 2,
+      "ce": 1.1810936596658494,
+      "cons": 0.0,
+      "val_wf1": 0.6470656134571229
+    },
+    {
+      "epoch": 3,
+      "ce": 0.775487695453745,
+      "cons": 0.0,
+      "val_wf1": 0.7297359740830246
+    },
+    {
+      "epoch": 4,
+      "ce": 0.556230776237719,
+      "cons": 0.0,
+      "val_wf1": 0.7822149532724805
+    },
+    {
+      "epoch": 5,
+      "ce": 0.41750107065896797,
+      "cons": 0.0,
+      "val_wf1": 0.7929749840265132
+    },
+    {
+      "epoch": 6,
+      "ce": 0.3148532478947832,
+      "cons": 0.0,
+      "val_wf1": 0.8164336320262249
+    }
+  ],
+  "seconds": 114
+}

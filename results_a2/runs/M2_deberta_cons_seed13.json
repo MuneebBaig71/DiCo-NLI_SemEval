@@ -1,0 +1,61 @@
+{
+  "cfg": {
+    "model": "microsoft/deberta-v3-base",
+    "seed": 13,
+    "epochs": 6,
+    "lr": 2e-05,
+    "batch_pairs": 8,
+    "max_len": 64,
+    "warmup": 0.1,
+    "weight_decay": 0.01,
+    "lambda_cons": 1.0,
+    "neg_weight": 1.0,
+    "val_frac": 0.1,
+    "split_seed": 2027,
+    "max_train_rows": null,
+    "out_dir": "results_a2",
+    "tag": "M2_deberta_cons_seed13"
+  },
+  "tag": "M2_deberta_cons_seed13",
+  "best_epoch": 6,
+  "best_val_wf1": 0.8713320271830848,
+  "history": [
+    {
+      "epoch": 1,
+      "ce": 1.2324184239512743,
+      "cons": 0.017491986264234805,
+      "val_wf1": 0.7494696385450775
+    },
+    {
+      "epoch": 2,
+      "ce": 0.59367389243209,
+      "cons": 0.07292975531185442,
+      "val_wf1": 0.8359147868865744
+    },
+    {
+      "epoch": 3,
+      "ce": 0.3105826620200668,
+      "cons": 0.08253022017882845,
+      "val_wf1": 0.8572029163466622
+    },
+    {
+      "epoch": 4,
+      "ce": 0.18812228825808774,
+      "cons": 0.05195166400517337,
+      "val_wf1": 0.8585381169905876
+    },
+    {
+      "epoch": 5,
+      "ce": 0.1188357455286696,
+      "cons": 0.03939572297920934,
+      "val_wf1": 0.8668577107775478
+    },
+    {
+      "epoch": 6,
+      "ce": 0.0865463923716993,
+      "cons": 0.0321499265837977,
+      "val_wf1": 0.8713320271830848
+    }
+  ],
+  "seconds": 199
+}
