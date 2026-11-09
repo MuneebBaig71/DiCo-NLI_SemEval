@@ -41,6 +41,12 @@ The individual steps are also available as scripts, run from the repo root:
 
 The fine-tuning step runs inside the notebook. `notebooks/03_finetune_transformers_colab.ipynb` is a standalone Colab version of it.
 
+### Multilingual pilot (Tracks 2–4)
+
+Pilot runs on Spanish, Basque and mixed-language pairs with mDeBERTa-v3-base. Code and details are in [`multilingual/`](multilingual/README.md):
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MuneebBaig71/DiCo-NLI_SemEval/blob/main/multilingual/multilingual_colab.ipynb)
+
 ## Layout
 
 ```
@@ -50,7 +56,8 @@ assignment1_dico_nli.ipynb            First version (1 seed), results in results
 01_ ... 05_*.py                       Individual pipeline steps as scripts
 src/data.py                           Data loading, prediction writing, official scoring
 src/features.py                       Hand-crafted pair features (EDA and feature baseline)
-data/                                 Track 1 train/dev CSVs (unchanged from the organizers' repo)
+data/                                 Track 1-4 train/dev CSVs (unchanged from the organizers' repo)
+multilingual/                         Multilingual pilot (Tracks 2-4): code and Colab notebook
 evaluation_functions/                 Official scorer (unchanged from the organizers' repo)
 literature/                           Task proposal, pilot paper, BibTeX
 results_v2/                           Final results used in the report

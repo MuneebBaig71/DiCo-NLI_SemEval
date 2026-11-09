@@ -1,6 +1,10 @@
 # Multilingual pilot: Tracks 2–4 (ES, EU, MIX)
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MuneebBaig71/DiCo-NLI_SemEval/blob/main/multilingual/multilingual_colab.ipynb)
+
 A small, separate set of experiments that checks whether the Track 1 pipeline carries over to the other DiCo-NLI tracks. It reuses `src/train_a2.py` (training recipe, consistency loss) and `src/decoding.py` (decoding rules) unchanged; nothing in the A2 code is modified.
+
+To run it, open [`multilingual_colab.ipynb` in Colab](https://colab.research.google.com/github/MuneebBaig71/DiCo-NLI_SemEval/blob/main/multilingual/multilingual_colab.ipynb), switch the runtime to a T4 GPU, and run the cells in order.
 
 ## Files
 
