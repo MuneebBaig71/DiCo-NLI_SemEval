@@ -1,4 +1,4 @@
-\begin{thebibliography}{9}
+\begin{thebibliography}{11}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -14,6 +14,16 @@ Jon~Felix Apaolaza~Larraya, Begoña Altuna, Aitor Soroa, and Inigo
   Evaluation Conference (LREC 2026)}, pages 5431--5444, Palma, Mallorca, Spain,
   2026. European Language Resources Association.
 \newblock \doi{10.63317/4prei82n6ev9}.
+
+\bibitem[Devlin et~al.(2019)Devlin, Chang, Lee, and Toutanova]{devlin2019bert}
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+\newblock {BERT}: Pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock In \emph{Proceedings of the 2019 Conference of the North American
+  Chapter of the Association for Computational Linguistics: Human Language
+  Technologies, Volume 1}, pages 4171--4186. Association for Computational
+  Linguistics, 2019.
+\newblock \doi{10.18653/v1/N19-1423}.
 
 \bibitem[{DiCo-NLI Organizers}(2026)]{diconli2026}
 {DiCo-NLI Organizers}.
@@ -63,6 +73,13 @@ Tao Li, Vivek Gupta, Maitrey Mehta, and Vivek Srikumar.
 \newblock In \emph{Proceedings of the 2019 Conference on Empirical Methods in
   Natural Language Processing and the 9th International Joint Conference on
   Natural Language Processing}, pages 3924--3935, 2019.
+
+\bibitem[Liu et~al.(2019)Liu, Ott, Goyal, Du, Joshi, Chen, Levy, Lewis,
+  Zettlemoyer, and Stoyanov]{liu2019roberta}
+Yinhan Liu, Myle Ott, Naman Goyal, Jingfei Du, Mandar Joshi, Danqi Chen, Omer
+  Levy, Mike Lewis, Luke Zettlemoyer, and Veselin Stoyanov.
+\newblock {RoBERTa}: A robustly optimized {BERT} pretraining approach.
+\newblock \emph{arXiv preprint arXiv:1907.11692}, 2019.
 
 \bibitem[MacCartney(2009)]{maccartney2009natural}
 Bill MacCartney.
