@@ -1,8 +1,27 @@
-# DiCo-NLI (SemEval-2027 Task 2): Assignment 1
+# DiCo-NLI (SemEval-2027 Task 2): Assignments 1 and 2
 
-CS-878 Deep Learning, Assignment 1: task formulation, selective EDA and baselines for DiCo-NLI, Track 1 (English).
+CS-878 Deep Learning, Track 1 (English). Group 1: Muhammad Muneeb Baig, Syed Kamran Ali Shah, Kashaf Ali Haroon.
 
-Group 1: Muhammad Muneeb Baig, Syed Kamran Ali Shah, Kashaf Ali Haroon.
+## Assignment 2: Proposed Approach and Experimental Design
+
+- **Report:** `report_a2/main.pdf` (LaTeX source `report_a2/main.tex`, `report_a2/references.bib`).
+- **Results:** `results_a2/`. `results_a2/MANIFEST.md` maps every reported number to its configuration and files.
+- **Run everything on Colab (T4 GPU):** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/MuneebBaig71/DiCo-NLI_SemEval/blob/main/a2_colab.ipynb)
+
+| File | What it does |
+|---|---|
+| `src/train_a2.py` | Pair-aware fine-tuning (DeBERTa-v3 / RoBERTa), consistency loss, Neg weighting, validation-based epoch selection, checkpoint save/load |
+| `src/decoding.py` | Decoding rules: argmax, symmetric, struct_pair, struct_full |
+| `06_decoding_experiments.py` | Scores every saved run under every decoding rule with the official scorer |
+| `07_a2_analysis.py` | Paired cluster bootstrap CIs, subgroup accuracy, per-class P/R/F1, confusion matrices (`results_a2/analysis/`) |
+| `a2_colab.ipynb` | Training runs (M0-M3, seeds 13/42/87), scoring, Codabench submission file, checkpoint check |
+| `multilingual/` | Pilot for Tracks 2-4 (planned for Assignment 3) |
+
+Best tested system (dev, development phase): M3 three-seed ensemble with struct_full decoding, W-F1 0.936, SoftCons 1.0, HardCons 0.924 (Codabench submission 1042178). The struct rules rely on a property of the released train/dev data; see the report.
+
+## Assignment 1
+
+Task formulation, selective EDA and baselines.
 
 All scores are on the official dev split, computed with the organizers' official scorer.
 
