@@ -81,3 +81,12 @@ data (paired rows are never Neg, single rows are always Neg); it is not guarante
   but each seed gets exactly 12 of those 24 right, in mirrored Fwd/Bwd vs Eq swaps, so
   the confusion counts coincide. Symmetric decoding makes errors come in mirrored pairs,
   which makes such ties more likely.
+
+## Checkpoint save/load check (12 Nov 2026, `a2_colab.ipynb` cell 10)
+
+M3 was retrained at seed 42 with `save_checkpoint=True`, the checkpoint was reloaded from disk with
+`predict_from_checkpoint`, and dev was predicted again. The reloaded predictions
+(`checkpoint_check/M3_ckpt_check_seed42_reloaded_dev.csv`) give W-F1 0.8292, SoftCons 0.8736,
+HardCons 0.8195, and all 660 labels are identical to the original M3 seed-42 run
+(`predictions/M3_deberta_cons_neg_seed42_dev.csv`). The checkpoint itself (about 0.74 GB) is kept
+on Google Drive (`MyDrive/DiCo_A2_ckpt_check`), not in the repository.

@@ -25,12 +25,6 @@
 \newcommand{\Bwd}{\textsc{Bwd}}
 \newcommand{\Neg}{\textsc{Neg}}
 \newcommand{\sd}[1]{\,{\scriptsize$\pm$#1}}
-% --- filled in from the Colab checkpoint check (cell 10)
-\newcommand{\SOFTTORCH}{\textcolor{red}{[x]}}
-\newcommand{\SOFTTF}{\textcolor{red}{[x]}}
-\newcommand{\REPEAT}{\textcolor{red}{[pending]}}
-\newcommand{\CKPTSIZE}{\textcolor{red}{[pending]}}
-\newcommand{\CKPTCHECK}{\textcolor{red}{[pending]}}
 
 \title{Stronger Encoders and Structure-Constrained Decoding\\ for DiCo-NLI (Track 1)}
 \author{Muhammad Muneeb Baig, Syed Kamran Ali Shah, Kashaf Ali Haroon\\ MS Data Science, SEECS, NUST\\ CS-878 Deep Learning, Assignment 2: Proposed Approach and Experimental Design}
@@ -267,7 +261,7 @@ Loss settings & $\lambda\in\{0,0.5,1\}$, $w_{\Neg}\in\{1,2\}$ \\
 Precision & fp32 \\
 Seeds & 13, 42, 87 \\
 Hardware & Google Colab, NVIDIA T4 (16\,GB) \\
-Software & Python 3, PyTorch \textbf{\SOFTTORCH}, Transformers \textbf{\SOFTTF}, scikit-learn \\
+Software & Python 3, PyTorch and Hugging Face Transformers (Colab defaults, Nov.\ 2026), scikit-learn \\
 Cost & $\approx$2 min per RoBERTa run, 3.3 min per DeBERTa run (6 epochs) \\
 \bottomrule
 \end{tabularx}
@@ -319,9 +313,9 @@ Seeds & \texttt{set\_seed} (Python, NumPy, PyTorch, CUDA) \\
 \label{tab:impl}
 \end{table}
 
-\textbf{Minimum-requirement checks.} \emph{Data load correctly:} row counts, label counts and the pair structure match the release. \emph{Inputs become the intended representation:} each batch holds both orientations of its pairs. \emph{The model trains and runs inference:} all 13 runs completed with finite losses. \emph{Predictions are generated:} a probability file per run and split, and decoded label files per rule. \emph{A metric is computed:} the official scorer runs on every file; our own metric code matches it exactly. \emph{The experiment repeats from its configuration:} rerunning M3 at seed 42 from its stored configuration \REPEAT.
+\textbf{Minimum-requirement checks.} \emph{Data load correctly:} row counts, label counts and the pair structure match the release. \emph{Inputs become the intended representation:} each batch holds both orientations of its pairs. \emph{The model trains and runs inference:} all 13 runs completed with finite losses. \emph{Predictions are generated:} a probability file per run and split, and decoded label files per rule. \emph{A metric is computed:} the official scorer runs on every file; our own metric code matches it exactly. \emph{The experiment repeats from its configuration:} retraining M3 at seed 42 from its stored configuration reproduced all 660 dev labels of the original run (W-F1 0.829, HardCons 0.820).
 
-\textbf{Checkpoint saving and loading.} With \texttt{save\_checkpoint=True}, the selected epoch is written with its tokenizer and configuration (\CKPTSIZE). Reloading it from disk and predicting dev again \CKPTCHECK.
+\textbf{Checkpoint saving and loading.} With \texttt{save\_checkpoint=True}, the selected epoch is written with its tokenizer and configuration (about 0.74\,GB in fp32). Reloading it from disk in a separate step and predicting dev again gives the same 660 labels and the same official scores as the trained model.
 
 \section{Preliminary Results}
 \label{sec:results}
@@ -481,7 +475,7 @@ Gold & \Eq & \Fwd & \Bwd & \Neg & & \Eq & \Fwd & \Bwd & \Neg \\
 \section{Reproducibility and Limitations}
 \label{sec:repro}
 
-\textbf{Reproducibility.} The repository holds the exact code used for every reported number, the per-run configuration and training history (\texttt{runs/<tag>.json}), the dev and validation probabilities of every run, the decoded label files, and a manifest that maps each number to its configuration and files. All scores were recomputed from the saved probabilities with the official scorer, matching the original runs to within $10^{-16}$. The data split, preprocessing and scoring scripts were the same for all systems. Seeds are fixed, but GPU kernels are not fully deterministic, so a rerun with the same seed gives close but not identical predictions (Section~\ref{sec:impl}); we therefore report seed means and standard deviations rather than single runs.
+\textbf{Reproducibility.} The repository holds the exact code used for every reported number, the per-run configuration and training history (\texttt{runs/<tag>.json}), the dev and validation probabilities of every run, the decoded label files, and a manifest that maps each number to its configuration and files. All scores were recomputed from the saved probabilities with the official scorer, matching the original runs to within $10^{-16}$. The data split, preprocessing and scoring scripts were the same for all systems. Seeds are fixed, and retraining M3 at seed 42 reproduced every dev label of the original run (Section~\ref{sec:impl}). GPU kernels are not guaranteed to be deterministic, so we still report seed means and standard deviations rather than single runs.
 
 \textbf{Limitations.} (1) The structural rules depend on a property of train and dev that may not hold for the test set; we will report test results with and without them. (2) Dev informed the choice of configuration, so dev scores are optimistic. (3) Three seeds are few; the bootstrap intervals cover dev-sampling uncertainty but not every source of variation. (4) Checkpoints are selected by argmax validation W-F1, although the best results use structured decoding. (5) No hyperparameter search was run. (6) Only English is covered. (7) Some gold labels are debatable, and we have not yet measured how many.
 
