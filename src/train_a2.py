@@ -49,6 +49,7 @@ DEFAULTS = dict(
     max_train_rows=None,    # for quick smoke tests only
     out_dir="results_a2",
     tag=None,
+    save_checkpoint=False,  # True: write best epoch to <out_dir>/checkpoints/<tag>/
 )
 
 
@@ -203,6 +204,8 @@ def run(**overrides):
             best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
 
     model.load_state_dict(best_state)
+    if cfg["save_checkpoint"]:
+        save_checkpoint(model, tok, cfg, tag, best_ep, out / "checkpoints" / tag)
     for name, df in (("dev", dev_df), ("val", va)):
         p = predict_probs(model, df, tok, cfg, dev_)
         probs = pd.DataFrame(p, columns=LABELS)
@@ -218,3 +221,33 @@ def run(**overrides):
     (out / "runs" / f"{tag}.json").write_text(json.dumps(meta, indent=2))
     del model; torch.cuda.empty_cache() if torch.cuda.is_available() else None
     return meta
+
+
+# ---------------------------------------------------------------- checkpoints
+
+def save_checkpoint(model, tok, cfg, tag, best_epoch, path):
+    """Save the selected (best-validation) model, its tokenizer and the run config."""
+    path = Path(path)
+    path.mkdir(parents=True, exist_ok=True)
+    model.save_pretrained(path)
+    tok.save_pretrained(path)
+    (path / "a2_config.json").write_text(json.dumps(dict(cfg=cfg, tag=tag, best_epoch=best_epoch), indent=2))
+    print(f"[{tag}] checkpoint saved to {path}", flush=True)
+
+
+def load_checkpoint(path):
+    """Load a checkpoint written by save_checkpoint. Returns (model, tokenizer, cfg)."""
+    path = Path(path)
+    cfg = json.loads((path / "a2_config.json").read_text())["cfg"]
+    tok = AutoTokenizer.from_pretrained(path)
+    model = AutoModelForSequenceClassification.from_pretrained(path).to(device()).float()
+    model.eval()
+    return model, tok, cfg
+
+
+def predict_from_checkpoint(path, split="dev"):
+    """Reload a saved model and return (instance_ids, probabilities) for a split."""
+    model, tok, cfg = load_checkpoint(path)
+    df = load_split(split)
+    probs = predict_probs(model, df, tok, cfg, device())
+    return df.instance_id.tolist(), probs
