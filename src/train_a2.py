@@ -50,6 +50,7 @@ DEFAULTS = dict(
     out_dir="results_a2",
     tag=None,
     save_checkpoint=False,  # True: write best epoch to <out_dir>/checkpoints/<tag>/
+    reinit_head=False,      # True: start from a checkpoint with a different label set (NLI-pretrained)
 )
 
 
@@ -164,8 +165,11 @@ def run(**overrides):
     dev_df = load_split("dev")
 
     tok = AutoTokenizer.from_pretrained(cfg["model"])
+    # reinit_head=True replaces a checkpoint's own classifier (e.g. a 3-class NLI head)
+    # with a fresh 4-class one; the default leaves loading exactly as in the A2 runs.
+    extra = dict(ignore_mismatched_sizes=True) if cfg["reinit_head"] else {}
     model = AutoModelForSequenceClassification.from_pretrained(
-        cfg["model"], num_labels=len(LABELS)).to(dev_).float()  # fp32 on purpose (DeBERTa NaN fix)
+        cfg["model"], num_labels=len(LABELS), **extra).to(dev_).float()  # fp32 on purpose (DeBERTa NaN fix)
 
     loader = DataLoader(make_units(tr), batch_size=cfg["batch_pairs"], shuffle=True,
                         collate_fn=PairCollator(tr, tok, cfg["max_len"]))
