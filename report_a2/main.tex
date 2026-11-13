@@ -170,7 +170,7 @@ All systems use the same dev set and the official scorer (Table~\ref{tab:systems
 
 \textbf{Simple baselines.} The majority class (\Fwd) gets 0.288 accuracy and 0.129 W-F1. No label dominates: \Fwd, \Bwd{} and \Eq{} each cover 26--29\% of dev and \Neg{} 16\%, so the task is only mildly imbalanced, with \Neg{} as the minority. A length-only logistic regression tests the heuristic that the longer phrase entails the shorter. It is highly consistent (SoftCons 0.989) but mostly wrong (W-F1 0.464), which is why we never compare systems on SoftCons alone.
 
-\textbf{Classical baselines.} Logistic regression (L2, $C=1$, L-BFGS, no class weighting, no resampling), trained on the full training set in A1, on three inputs: 26 standardised engineered features (lengths, coverage and containment in both directions, extra words, overlap, negation and number mismatch, and part-of-speech counts of non-shared words); TF-IDF unigrams and bigrams with separate blocks for $t_1$ and $t_2$, which keeps direction; and both together.
+\textbf{Classical baselines.} Logistic regression (L2, $C=1$, L-BFGS, no class weighting, no resampling), trained on the full training set in A1, on three inputs: 26 standardised engineered features (lengths, coverage and containment in both directions, extra words, overlap, negation and number mismatch, and part-of-speech counts of non-shared words); TF-IDF unigrams and bigrams with separate blocks for $t_1$ and $t_2$, which keeps direction; and both together. All features are used, with no feature selection.
 
 \textbf{Pretrained baselines.} BERT-base and RoBERTa-base were fully fine-tuned in A1 as cross-encoders with a linear head on the first token (lr $3\times10^{-5}$, batch 16, 6 epochs, final epoch kept) \citep{devlin2019bert,liu2019roberta}. M0 retrains RoBERTa-base under the A2 protocol for a like-for-like comparison.
 
@@ -275,7 +275,7 @@ Loss settings & $\lambda\in\{0,0.5,1\}$, $w_{\Neg}\in\{1,2\}$ \\
 Precision & fp32 \\
 Seeds & 13, 42, 87 \\
 Hardware & Colab NVIDIA T4 (16\,GB) \\
-Software & PyTorch, Transformers (Colab, Nov.\ 2026) \\
+Software & Python 3.13, PyTorch 2.14.1 (CUDA 13.0), Transformers 5.22.1, scikit-learn 1.6.1 (Colab) \\
 Cost & 2 min (RoBERTa), 3.3 min (DeBERTa) per run \\
 \bottomrule
 \end{tabularx}
@@ -466,7 +466,7 @@ Gold & \Eq & \Fwd & \Bwd & \Neg & & \Eq & \Fwd & \Bwd & \Neg \\
 \section{Reproducibility and Limitations}
 \label{sec:repro}
 
-\textbf{Reproducibility.} The repository holds the exact code, each run's configuration, history and probabilities, and a manifest linking every reported number to its files. All scores were recomputed from the saved probabilities with the official scorer and match the original runs. Every system used the same split, preprocessing and scoring scripts. Seeds are fixed and the M3 seed-42 rerun reproduced every label, but GPU kernels are not guaranteed to be deterministic, so we report seed means and standard deviations.
+\textbf{Reproducibility.} The repository\footnote{\url{https://github.com/MuneebBaig71/DiCo-NLI_SemEval}} holds the exact code, each run's configuration, history and probabilities, and a manifest linking every reported number to its files. All scores were recomputed from the saved probabilities with the official scorer and match the original runs. Every system used the same split, preprocessing and scoring scripts. Seeds are fixed and the M3 seed-42 rerun reproduced every label, but GPU kernels are not guaranteed to be deterministic, so we report seed means and standard deviations.
 
 \textbf{Limitations.} The structural rules rely on a property of train and dev that may not hold on test, so we will report test results with and without them. Dev informed our configuration choices, so dev scores are optimistic. Three seeds are few. Checkpoints are selected under argmax although the best results use structured decoding. No hyperparameter search was run, only English is covered, and we have not yet measured how many gold labels are debatable.
 
