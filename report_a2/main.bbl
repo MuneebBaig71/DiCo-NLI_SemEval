@@ -50,6 +50,7 @@ Pengcheng He, Jianfeng Gao, and Weizhu Chen.
   with gradient-disentangled embedding sharing.
 \newblock In \emph{The Eleventh International Conference on Learning
   Representations}, 2023.
+\newblock URL \url{https://arxiv.org/abs/2111.09543}.
 
 \bibitem[Jang et~al.(2022)Jang, Kwon, and Lukasiewicz]{jang2022becel}
 Myeongjun Jang, Deuk~Sin Kwon, and Thomas Lukasiewicz.
@@ -66,6 +67,7 @@ Balaji Lakshminarayanan, Alexander Pritzel, and Charles Blundell.
   ensembles.
 \newblock In \emph{Advances in Neural Information Processing Systems},
   volume~30, 2017.
+\newblock URL \url{https://arxiv.org/abs/1612.01474}.
 
 \bibitem[Li et~al.(2019)Li, Gupta, Mehta, and Srikumar]{li2019logic}
 Tao Li, Vivek Gupta, Maitrey Mehta, and Vivek Srikumar.
@@ -73,6 +75,7 @@ Tao Li, Vivek Gupta, Maitrey Mehta, and Vivek Srikumar.
 \newblock In \emph{Proceedings of the 2019 Conference on Empirical Methods in
   Natural Language Processing and the 9th International Joint Conference on
   Natural Language Processing}, pages 3924--3935, 2019.
+\newblock \doi{10.18653/v1/D19-1405}.
 
 \bibitem[Liu et~al.(2019)Liu, Ott, Goyal, Du, Joshi, Chen, Levy, Lewis,
   Zettlemoyer, and Stoyanov]{liu2019roberta}
@@ -92,5 +95,6 @@ Pasquale Minervini and Sebastian Riedel.
   background knowledge.
 \newblock In \emph{Proceedings of the 22nd Conference on Computational Natural
   Language Learning}, pages 65--74, 2018.
+\newblock \doi{10.18653/v1/K18-1007}.
 
 \end{thebibliography}
