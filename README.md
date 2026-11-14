@@ -16,6 +16,7 @@ CS-878 Deep Learning, Track 1 (English). Group 1: Muhammad Muneeb Baig, Syed Kam
 | `07_a2_analysis.py` | Paired cluster bootstrap CIs, subgroup accuracy, per-class P/R/F1, confusion matrices (`results_a2/analysis/`) |
 | `a2_colab.ipynb` | Training runs (M0-M3, seeds 13/42/87), scoring, Codabench submission file, checkpoint check |
 | `multilingual/` | Pilot for Tracks 2-4 (planned for Assignment 3) |
+| `a3_experiments_colab.ipynb`, `08_exp_summary.py` | English-track experiments planned for Assignment 3 (NLI-pretrained and large encoders); not part of A2 |
 
 Best tested system (dev, development phase): M3 three-seed ensemble with struct_full decoding, W-F1 0.936, SoftCons 1.0, HardCons 0.924 (Codabench submission 1042178). The struct rules rely on a property of the released train/dev data; see the report.
 
