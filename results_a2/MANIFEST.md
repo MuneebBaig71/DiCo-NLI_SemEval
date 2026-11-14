@@ -72,7 +72,7 @@ data (paired rows are never Neg, single rows are always Neg); it is not guarante
 | Tracks | Track 1 (EN) only |
 | Codabench score | W-F1 0.935965, SoftCons 1.0, HardCons 0.924188 |
 | Local official-scorer score | W-F1 0.9360, SoftCons 1.0, HardCons 0.9242 (matches) |
-| Rebuild | `a2_colab.ipynb` cell 9 |
+| Rebuild | `a2_colab.ipynb` cell 9 (verified: reproduces the Codabench scores exactly) |
 
 ## Verification notes
 
@@ -90,3 +90,9 @@ M3 was retrained at seed 42 with `save_checkpoint=True`, the checkpoint was relo
 HardCons 0.8195, and all 660 labels are identical to the original M3 seed-42 run
 (`predictions/M3_deberta_cons_neg_seed42_dev.csv`). The checkpoint itself (about 0.74 GB) is kept
 on Google Drive (`MyDrive/DiCo_A2_ckpt_check`), not in the repository.
+
+## Neg-both-ways counts (report Section 9, consistency loss)
+
+Pairs (of 277) whose two orientations are both predicted Neg under argmax decoding, from
+`decoding/<tag>__argmax.csv`, seeds 13/42/87: M1 11, 10, 23 (mean 14.7); M2 16, 28, 21 (mean 21.7);
+M3 20, 25, 24 (mean 23.0). Strictly one-sided Neg pairs: M1 mean 9.0, M2 6.7, M3 6.3.
